@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 /* STYLEDGIT SYSTEM
 Generics Styles  ..................................................*/
 
@@ -62,6 +64,7 @@ button {
   color: #f4f4f9;
   font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 button.small {
