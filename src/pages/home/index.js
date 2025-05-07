@@ -1,3 +1,118 @@
+const renderFinanceElements = (data) => {
+  const totalItems = data.length;
+  const revenues = data
+    .filter((item) => Number(item.value) > 0)
+    .reduce((acc, item) => acc + Number(item.value), 0);
+  const expenses = data
+    .filter((item) => Number(item.value) < 0)
+    .reduce((acc, item) => acc + Number(item.value), 0);
+  const totalValue = revenues + expenses;
+
+  // render total items
+  const financeCard1 = document.getElementById("finance-card-1");
+  financeCard1.innerHTML = "";
+
+  const totalSubtext = document.createTextNode("Total de lançamentos");
+  const totalSubTextElement = document.createElement("h3");
+  totalSubTextElement.appendChild(totalSubtext);
+  financeCard1.appendChild(totalSubTextElement);
+
+  const totalText = document.createTextNode(totalItems);
+  const totalElement = document.createElement("h1");
+  totalElement.id = "total-element";
+  totalElement.className = "mt smaller";
+  totalElement.appendChild(totalText);
+  financeCard1.appendChild(totalElement);
+
+  // render revenue
+  const financeCard2 = document.getElementById("finance-card-2");
+  financeCard2.innerHTML = "";
+
+  const revenueSubtext = document.createTextNode("Receitas");
+  const revenueSubtextElement = document.createElement("h3");
+  revenueSubtextElement.appendChild(revenueSubtext);
+  financeCard2.appendChild(revenueSubtextElement);
+
+  const revenueText = document.createTextNode(
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(revenues)
+  );
+  const revenueTextElement = document.createElement("h1");
+  revenueTextElement.id = "revenue-element";
+  revenueTextElement.className = "mt smaller";
+  revenueTextElement.appendChild(revenueText);
+  financeCard2.appendChild(revenueTextElement);
+
+  // render expenses
+  const financeCard3 = document.getElementById("finance-card-3");
+  financeCard3.innerHTML = "";
+
+  const expensesSubtext = document.createTextNode("Despesas");
+  const expensesSubtextElement = document.createElement("h3");
+  expensesSubtextElement.appendChild(expensesSubtext);
+  financeCard3.appendChild(expensesSubtextElement);
+
+  const expensesText = document.createTextNode(
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(expenses)
+  );
+  const expensesTextElement = document.createElement("h1");
+  expensesTextElement.id = "expenses-element";
+  expensesTextElement.className = "mt smaller";
+  expensesTextElement.appendChild(expensesText);
+  financeCard3.appendChild(expensesTextElement);
+
+  // render balance
+  const financeCard4 = document.getElementById("finance-card-4");
+  financeCard4.innerHTML = "";
+
+  const balanceSubtext = document.createTextNode("Balanço");
+  const balanceSubtextElement = document.createElement("h3");
+  balanceSubtextElement.appendChild(balanceSubtext);
+  financeCard4.appendChild(balanceSubtextElement);
+
+  const balanceText = document.createTextNode(
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(totalValue)
+  );
+  const balanceTextElement = document.createElement("h1");
+  balanceTextElement.id = "balance-element";
+  balanceTextElement.className = "mt smaller";
+  balanceTextElement.style.color = "#5936CD";
+  balanceTextElement.appendChild(balanceText);
+  financeCard4.appendChild(balanceTextElement);
+};
+
+const onLoadFinancesData = async () => {
+  try {
+    const dateInputValue = document.getElementById("selected-date").value;
+    const email = localStorage.getItem("@WalletApp:userEmail");
+    const result = await fetch(
+      `https://mp-wallet-app-api.herokuapp.com/finances?date=${dateInputValue}`,
+      {
+        method: "GET",
+        headers: {
+          email: email,
+        },
+      }
+    );
+    const data = await result.json();
+    renderFinanceElements(data);
+    renderFinancesList(data);
+    return data;
+  } catch (error) {
+    return { error };
+  }
+};
+
+
+// Carregar os dados do usuário da API para o Header (navbar)
 const onLoadUserInfo = () => {
   const email = localStorage.getItem("@WalletApp:userEmail");
   const name = localStorage.getItem("@WalletApp:userName");
@@ -26,6 +141,18 @@ const onLoadUserInfo = () => {
   navbarUserAvatar.appendChild(nameElement);
 };
 
+const setInitialDate = () => {
+  const dateInput = document.getElementById("selected-date");
+  const nowDate = new Date().toISOString().split("T")[0];
+  dateInput.value = nowDate;
+  dateInput.addEventListener("change", () => {
+    onLoadFinancesData();
+  });
+};
+
+
 window.onload = () => {
+  setInitialDate();
   onLoadUserInfo();
+  onLoadFinancesData();
 };

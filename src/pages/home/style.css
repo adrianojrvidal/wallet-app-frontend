@@ -4,7 +4,8 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 100vw;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   background-color: #f4f4f9;
 }
 
@@ -13,15 +14,23 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  box-sizing: border-box;
-  padding: 24px 112px;
-  width: 100vw;
   height: 72px;
+  width: 100vw;
   background-color: #ffffff;
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
+  padding: 24px 122px;
+  box-sizing: border-box;
+}
+
+.logo-navbar {
+  height: 24px;
+  width: auto;
+}
+
+.navbar-calendar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 260px;
 }
 
 .navbar-user-container {
@@ -43,7 +52,23 @@
   background-color: #e4fde1;
 }
 
-.logo-navbar {
-  height: 24px;
-  width: auto;
+.finance-card-container {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 48px 122px;
+  box-sizing: border-box;
+}
+
+.finance-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  height: 140px;
+  border-radius: 24px;
+  background-color: #ffffff;
 }
